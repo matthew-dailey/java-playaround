@@ -1,0 +1,10 @@
+# IDE/editor files
+.idea
+*.iml
+*.swp
+.settings
+.project
+.classpath
+
+# build files
+/target
