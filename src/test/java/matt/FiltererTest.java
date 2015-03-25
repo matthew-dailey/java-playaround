@@ -13,7 +13,6 @@ public class FiltererTest {
 
     Filterer filterer = new Filterer(TestHelpers.inputPaths);
 
-
     Set<String> results;
 
     // should not filter anything out

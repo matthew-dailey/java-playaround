@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * The Filterer is used to filter out exemplars where all of their paths have already been processed.
+ */
 public class Filterer {
 
   // take in a set of input paths
@@ -22,18 +25,16 @@ public class Filterer {
     this.inputPaths = inputPaths;
   }
 
-  //  public Set<String> filterExemplars(Set<String> exemplarIds) {
-  public Set<String> filterExemplars(Set<String> exemplarIds, Iterator<Map.Entry<Key, Value>> iter) {
-    Map.Entry<Key, Value> entry;
+  public Set<String> filterExemplars(Set<String> exemplarIds, Iterator<Map.Entry<Key, Value>> exemplarAndPathsIterator) {
+    Map.Entry<Key, Value> exemplarAndPathEntry;
 
     PathAggregator aggregator = new PathAggregator(inputPaths, exemplarIds);
-    while (iter.hasNext()) {
-      entry = iter.next();
+    while (exemplarAndPathsIterator.hasNext()) {
+      exemplarAndPathEntry = exemplarAndPathsIterator.next();
 
-      final Key key = entry.getKey();
+      final Key key = exemplarAndPathEntry.getKey();
       final String exemplarId = key.getRow().toString();
-      final String path = key
-              .getColumnFamily().toString();
+      final String path = key.getColumnFamily().toString();
 
       aggregator.removePath(exemplarId, path);
     }
@@ -41,6 +42,10 @@ public class Filterer {
     return aggregator.getRemainingExemplars();
   }
 
+  /**
+   * Keeps track of remaining paths for an exemplar, and removes the exemplar when needed.
+   * Assumes exemplarIds come in sorted order
+   */
   public static class PathAggregator {
     private Set<String> allPaths;
 
@@ -54,11 +59,12 @@ public class Filterer {
       this.remaininingExemplars = new TreeSet<String>(allExemplars);
     }
 
+    /** Remove a path for an exemplar. */
     public void removePath(String exemplarId, String path) {
       if (currentExemplar == null) {
         resetState(exemplarId);
       } else if (!currentExemplar.equals(exemplarId)) {
-        // new exemplar
+        // new exemplar, reset state the same way
         resetState(exemplarId);
       }
 
@@ -77,6 +83,7 @@ public class Filterer {
       state = new AggregatorState(allPaths);
     }
 
+    /** simplified Set of Strings */
     public static class AggregatorState {
       private Set<String> remainingPaths;
 
@@ -93,6 +100,5 @@ public class Filterer {
       }
     }
 
-
   } // PathAggregator
-}
+} // Filterer
