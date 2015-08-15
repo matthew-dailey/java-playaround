@@ -7,10 +7,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class LambdasTest {
 
@@ -62,5 +64,46 @@ public class LambdasTest {
     String result = places.stream()
             .reduce("", String::concat);
     assertEquals("HereThereAnywhere", result);
+  }
+
+  @Test
+  public void predicateTest() {
+    Predicate<String> isHello = s -> s.equals("hello");
+    assertFalse(isHello.test("hi"));
+    assertFalse(isHello.test("bonjour"));
+    assertTrue(isHello.test("hello"));
+
+    Predicate<String> otherIsGreeting = Predicate.isEqual("hello");
+    assertFalse(otherIsGreeting.test("hi"));
+    assertFalse(otherIsGreeting.test("bonjour"));
+    assertTrue(otherIsGreeting.test("hello"));
+
+    Predicate<String> isGreeting = isHello.or(s -> s.equals("bonjour")).or(s -> s.equals("hi"));
+    assertTrue(isGreeting.test("hi"));
+    assertTrue(isGreeting.test("bonjour"));
+    assertTrue(isGreeting.test("hello"));
+
+    Predicate<String> notGreeting = isGreeting.negate();
+    assertFalse(notGreeting.test("hi"));
+    assertFalse(notGreeting.test("bonjour"));
+    assertFalse(notGreeting.test("hello"));
+  }
+
+  @Test
+  public void functionTest() {
+    Function<String, String> s_to_r = s -> s.replaceAll("s", "r");
+    Function<String, String> removeR = s -> s.replaceAll("r", "");
+
+    Function<String, String> whoWouldEverDoThis = s_to_r.compose(removeR);
+    assertEquals("rcirror", whoWouldEverDoThis.apply("scissors"));
+
+    // a.andThen(b) == b.compose(a)
+    Function<String, String> removeSandR = s_to_r.andThen(removeR);
+    assertEquals("cio", removeSandR.apply("scissors"));
+
+    Function<String, String> otherRemoveSandR = removeR.compose(s_to_r);
+    assertEquals("cio", otherRemoveSandR.apply("scissors"));
+
+    assertEquals("scissors", Function.identity().apply("scissors"));
   }
 }
