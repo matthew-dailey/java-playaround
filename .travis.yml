@@ -1,3 +1,6 @@
 language: java
 jdk:
     - oraclejdk8
+
+# something about container-based builds said to do this
+sudo: false
