@@ -1,6 +1,7 @@
 language: java
 jdk:
     - oraclejdk8
+    - openjdk8
 
 # something about container-based builds said to do this
 sudo: false
