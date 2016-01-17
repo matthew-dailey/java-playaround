@@ -1,21 +1,23 @@
 package matt.thread;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.ListeningExecutorService;
-import com.google.common.util.concurrent.MoreExecutors;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 
 public class MyExecutorTest {
 
@@ -29,7 +31,7 @@ public class MyExecutorTest {
   public static class MyCallable implements Callable<String> {
     @Override
     public String call() throws Exception {
-      Thread.sleep(1000);
+      Thread.sleep(100);
       return String.valueOf(System.currentTimeMillis());
     }
   }
@@ -40,6 +42,9 @@ public class MyExecutorTest {
             MoreExecutors.listeningDecorator(
                     Executors.newFixedThreadPool(100));
 
+    // we're making a Future whose main computation will sleep, then finish.
+    // we'll also attach callbacks for success and failure to edit the synchronous
+    // MESSAGES queue
     ListenableFuture<String> future = executor.submit(new MyCallable());
     Futures.addCallback(future, new FutureCallback<String>() {
       @Override
@@ -53,15 +58,19 @@ public class MyExecutorTest {
       }
     });
 
+    String answer = "";
     try {
       MESSAGES.add("Sleeping");
-      Thread.sleep(2000);
+      Thread.sleep(150);
       MESSAGES.add("Awaken");
-      future.get();
+      answer = future.get();
     } catch (InterruptedException | ExecutionException e) {
       fail("Future failed.");
     }
 
+    // since the main thread sleeps longer than the processing thread's sleep,
+    // we anticipate the callback to be called before the "Awaken" message here
+    assertFalse(answer.isEmpty());
     assertEquals("Sleeping", MESSAGES.poll());
     assertEquals("Success", MESSAGES.poll());
     assertEquals("Awaken", MESSAGES.poll());

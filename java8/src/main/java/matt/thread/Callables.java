@@ -2,6 +2,7 @@ package matt.thread;
 
 import java.util.concurrent.Callable;
 
+/** Contains classes that implement the {@link Callable} interface. */
 public class Callables {
 
   public static class DownloadCallable implements Callable<String> {
