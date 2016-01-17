@@ -11,9 +11,12 @@ import com.google.common.util.concurrent.ListenableFuture;
  */
 public interface FutureMaker {
 
+  /** The first step takes a List of Strings, and produces one String */
   ListenableFuture<String> createFirstStep(List<String> idChunk);
 
+  /** The second step may transform the input string into another string */
   ListenableFuture<String> createSecondStep(String s);
 
+  /** Create an AsyncFunction linking the other two methods asynchronously */
   AsyncFunction<String, String> createFirstToSecondFunction();
 }

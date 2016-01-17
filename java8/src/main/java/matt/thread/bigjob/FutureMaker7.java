@@ -18,6 +18,7 @@ public class FutureMaker7 implements FutureMaker {
     this.executor = executor;
   }
 
+  /** Concatenate list to single string */
   public ListenableFuture<String> createFirstStep(List<String> idChunk) {
     return executor.submit(new Callable<String>() {
       @Override
@@ -27,6 +28,7 @@ public class FutureMaker7 implements FutureMaker {
     });
   }
 
+  /** Uppercase input string */
   public ListenableFuture<String> createSecondStep(String s) {
     return executor.submit(new Callable<String>() {
       @Override
@@ -36,6 +38,7 @@ public class FutureMaker7 implements FutureMaker {
     });
   }
 
+  /** Create AsyncFunction that passes input to {@link #createSecondStep(String)} */
   public AsyncFunction<String, String> createFirstToSecondFunction() {
     return new AsyncFunction<String, String>() {
       @Override
