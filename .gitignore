@@ -6,5 +6,7 @@
 .project
 .classpath
 
+/nocommit/src
+
 # build files
 target
