@@ -25,6 +25,7 @@
     <modules>
         <module>accumulo</module>
         <module>java8</module>
+        <module>nocommit</module>
     </modules>
 
     <build>
