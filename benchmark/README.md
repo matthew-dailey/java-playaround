@@ -15,6 +15,14 @@ mvn clean package \
 This benchmark tests whether using if-else, switch, or a Supplier class is faster when
 going through **the same branch** in succession.
 
+Run with JMH 1.12 on:
+
+```
+java version "1.7.0_80"
+Java(TM) SE Runtime Environment (build 1.7.0_80-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)
+```
+
 ### Trial 1
 
 The initial implementation (commit f36fa67) found that the Supplier method was fastest, but not by
@@ -50,3 +58,30 @@ BranchingBenchmark.benchmarkSupplier                  avgt      20     0.051 ± 
 BranchingBenchmark.benchmarkSupplierPreConstructed    avgt      20     0.003 ±  0.001   us/op
 NoOpBenchmark.noop                                    avgt      20    ≈ 10⁻⁴            us/op
 ```
+
+Then implementing all the benchmarks
+
+```
+Benchmark                                            Mode  Cnt     Score    Error   Units
+BranchingBenchmark.benchmarkIfElse                  thrpt   20    29.377 ±  0.181  ops/us
+BranchingBenchmark.benchmarkIfElsePreConstructed    thrpt   20   399.611 ±  1.671  ops/us
+BranchingBenchmark.benchmarkSupplier                thrpt   20    29.784 ±  0.190  ops/us
+BranchingBenchmark.benchmarkSupplierPreConstructed  thrpt   20   400.330 ±  3.209  ops/us
+BranchingBenchmark.benchmarkSwitch                  thrpt   20    25.923 ±  0.132  ops/us
+BranchingBenchmark.benchmarkSwitchPreConstructed    thrpt   20   189.024 ±  3.573  ops/us
+NoOpBenchmark.noop                                  thrpt   20  3577.627 ± 60.499  ops/us
+BranchingBenchmark.benchmarkIfElse                   avgt   20     0.034 ±  0.001   us/op
+BranchingBenchmark.benchmarkIfElsePreConstructed     avgt   20     0.003 ±  0.001   us/op
+BranchingBenchmark.benchmarkSupplier                 avgt   20     0.034 ±  0.001   us/op
+BranchingBenchmark.benchmarkSupplierPreConstructed   avgt   20     0.002 ±  0.001   us/op
+BranchingBenchmark.benchmarkSwitch                   avgt   20     0.039 ±  0.001   us/op
+BranchingBenchmark.benchmarkSwitchPreConstructed     avgt   20     0.006 ±  0.001   us/op
+NoOpBenchmark.noop                                   avgt   20    ≈ 10⁻⁴            us/op
+```
+
+This shows
+
+1. Object construction was taking a majority of the time
+2. The if-else and the Supplier show approximately equal performance
+
+Maybe the switch statement is missing some optimization for Strings in this situation?
