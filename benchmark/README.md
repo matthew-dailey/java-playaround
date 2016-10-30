@@ -3,8 +3,7 @@
 To just run the microbenchmarks, you can skip unit tests, and just run the produced `benchmarks.jar`
 
 ```shell
-mvn clean package \
-    -DskipTests -am -pl benchmark \
+mvn clean package -DskipTests -am -pl benchmark \
     && java -jar benchmark/target/original-matt-benchmark-1.0-SNAPSHOT-shaded.jar
 ```
 
@@ -85,3 +84,9 @@ This shows
 2. The if-else and the Supplier show approximately equal performance
 
 Maybe the switch statement is missing some optimization for Strings in this situation?
+
+Also, a possible reason that the Supplier implementation is fast is because JMH isolates each benchmark, and then the JVM
+only loads one implementation of `Supplier<HttpRequestBase>`, which means that function calls
+through that interface go directly to the object rather than make a virtual function call.
+I tried to combat this by having two implementations in the benchmark class, but if each benchmark method only
+uses one of those, then it's entirely possible that the forked JVMs only load one implementation each.

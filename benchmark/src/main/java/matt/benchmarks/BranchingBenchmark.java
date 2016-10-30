@@ -33,7 +33,8 @@ public class BranchingBenchmark {
     public HttpRequestBase get() {
       return new HttpGet();
     }
-  };  private static final Supplier<HttpRequestBase> SUPPLIER_PRE_CONSTRUCTED = new Supplier<HttpRequestBase>() {
+  };
+  private static final Supplier<HttpRequestBase> SUPPLIER_PRE_CONSTRUCTED = new Supplier<HttpRequestBase>() {
     @Override
     public HttpRequestBase get() {
       return GET;
