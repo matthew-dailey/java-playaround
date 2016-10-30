@@ -1,5 +1,6 @@
 package matt.benchmarks;
 
+import com.google.common.base.Supplier;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
@@ -17,6 +18,12 @@ import org.openjdk.jmh.annotations.State;
 public class BranchingBenchmark {
 
   private static final String HTTP_VERB = "GET";
+  private static final Supplier<HttpRequestBase> SUPPLIER = new Supplier<HttpRequestBase>() {
+    @Override
+    public HttpRequestBase get() {
+      return new HttpGet();
+    }
+  };
 
   @Benchmark
   public HttpRequestBase benchmarkSwitch() {
@@ -61,24 +68,24 @@ public class BranchingBenchmark {
       request = new HttpHead();
     } else if (HTTP_VERB.equals(HttpPost.METHOD_NAME)) {
       request = new HttpPost();
-//    case HttpPut.METHOD_NAME:
-//      request = new HttpPut();
-//      break;
-//    case HttpDelete.METHOD_NAME:
-//      request = new HttpDelete();
-//      break;
-//    case HttpTrace.METHOD_NAME:
-//      request = new HttpTrace();
-//      break;
-//    case HttpOptions.METHOD_NAME:
-//      request = new HttpOptions();
-//      break;
-//    case HttpPatch.METHOD_NAME:
-//      request = new HttpPatch();
-//      break;
+    } else if (HTTP_VERB.equals(HttpPut.METHOD_NAME)) {
+      request = new HttpPut();
+    } else if (HTTP_VERB.equals(HttpDelete.METHOD_NAME)) {
+      request = new HttpDelete();
+    } else if (HTTP_VERB.equals(HttpTrace.METHOD_NAME)) {
+      request = new HttpTrace();
+    } else if (HTTP_VERB.equals(HttpOptions.METHOD_NAME)) {
+      request = new HttpOptions();
+    } else if (HTTP_VERB.equals(HttpPatch.METHOD_NAME)) {
+      request = new HttpPatch();
     } else {
       throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
     }
     return request;
-}
+  }
+
+  @Benchmark
+  public HttpRequestBase benchmarkSupplier() {
+    return SUPPLIER.get();
+  }
 }
