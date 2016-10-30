@@ -75,7 +75,7 @@ public class BranchingBenchmark {
   }
 
   @Benchmark
-  public HttpRequestBase benchmarkSwitchPreConstructed() {
+  public HttpRequestBase benchmarkPreConstructedSwitch() {
     HttpRequestBase request;
     switch (HTTP_VERB) {
     case HttpGet.METHOD_NAME:
@@ -134,7 +134,7 @@ public class BranchingBenchmark {
   }
 
   @Benchmark
-  public HttpRequestBase benchmarkIfElsePreConstructed() {
+  public HttpRequestBase benchmarkPreConstructedIfElse() {
     HttpRequestBase request;
     if (HTTP_VERB.equals(HttpGet.METHOD_NAME)) {
       request = GET;
@@ -164,7 +164,7 @@ public class BranchingBenchmark {
   }
 
   @Benchmark
-  public HttpRequestBase benchmarkSupplierPreConstructed() {
+  public HttpRequestBase benchmarkPreConstructedSupplier() {
     return SUPPLIER_PRE_CONSTRUCTED.get();
   }
 }
