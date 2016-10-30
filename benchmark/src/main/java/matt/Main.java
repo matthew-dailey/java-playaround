@@ -17,7 +17,8 @@ public class Main {
     Options opt = new OptionsBuilder()
       .include("matt.benchmarks.*")
       .forks(1)
-      .mode(Mode.All)
+      .mode(Mode.Throughput)
+      .mode(Mode.AverageTime)
       .timeUnit(TimeUnit.MICROSECONDS)
       .shouldFailOnError(true)
       .build();

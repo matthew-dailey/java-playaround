@@ -18,10 +18,25 @@ import org.openjdk.jmh.annotations.State;
 public class BranchingBenchmark {
 
   private static final String HTTP_VERB = "GET";
+
+  private static final HttpRequestBase GET = new HttpGet();
+  private static final HttpRequestBase HEAD = new HttpHead();
+  private static final HttpRequestBase POST = new HttpPost();
+  private static final HttpRequestBase PUT = new HttpPut();
+  private static final HttpRequestBase DELETE = new HttpDelete();
+  private static final HttpRequestBase TRACE = new HttpTrace();
+  private static final HttpRequestBase OPTIONS = new HttpOptions();
+  private static final HttpRequestBase PATCH = new HttpPatch();
+
   private static final Supplier<HttpRequestBase> SUPPLIER = new Supplier<HttpRequestBase>() {
     @Override
     public HttpRequestBase get() {
       return new HttpGet();
+    }
+  };  private static final Supplier<HttpRequestBase> SUPPLIER_PRE_CONSTRUCTED = new Supplier<HttpRequestBase>() {
+    @Override
+    public HttpRequestBase get() {
+      return GET;
     }
   };
 
@@ -60,6 +75,40 @@ public class BranchingBenchmark {
   }
 
   @Benchmark
+  public HttpRequestBase benchmarkSwitchPreConstructed() {
+    HttpRequestBase request;
+    switch (HTTP_VERB) {
+    case HttpGet.METHOD_NAME:
+      request = GET;
+      break;
+    case HttpHead.METHOD_NAME:
+      request = HEAD;
+      break;
+    case HttpPost.METHOD_NAME:
+      request = POST;
+      break;
+    case HttpPut.METHOD_NAME:
+      request = PUT;
+      break;
+    case HttpDelete.METHOD_NAME:
+      request = DELETE;
+      break;
+    case HttpTrace.METHOD_NAME:
+      request = TRACE;
+      break;
+    case HttpOptions.METHOD_NAME:
+      request = OPTIONS;
+      break;
+    case HttpPatch.METHOD_NAME:
+      request = PATCH;
+      break;
+    default:
+      throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
+    }
+    return request;
+  }
+
+  @Benchmark
   public HttpRequestBase benchmarkIfElse() {
     HttpRequestBase request;
     if (HTTP_VERB.equals(HttpGet.METHOD_NAME)) {
@@ -85,7 +134,37 @@ public class BranchingBenchmark {
   }
 
   @Benchmark
+  public HttpRequestBase benchmarkIfElsePreConstructed() {
+    HttpRequestBase request;
+    if (HTTP_VERB.equals(HttpGet.METHOD_NAME)) {
+      request = GET;
+    } else if (HTTP_VERB.equals(HttpHead.METHOD_NAME)) {
+      request = HEAD;
+    } else if (HTTP_VERB.equals(HttpPost.METHOD_NAME)) {
+      request = POST;
+    } else if (HTTP_VERB.equals(HttpPut.METHOD_NAME)) {
+      request = PUT;
+    } else if (HTTP_VERB.equals(HttpDelete.METHOD_NAME)) {
+      request = DELETE;
+    } else if (HTTP_VERB.equals(HttpTrace.METHOD_NAME)) {
+      request = TRACE;
+    } else if (HTTP_VERB.equals(HttpOptions.METHOD_NAME)) {
+      request = OPTIONS;
+    } else if (HTTP_VERB.equals(HttpPatch.METHOD_NAME)) {
+      request = PATCH;
+    } else {
+      throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
+    }
+    return request;
+  }
+
+  @Benchmark
   public HttpRequestBase benchmarkSupplier() {
     return SUPPLIER.get();
+  }
+
+  @Benchmark
+  public HttpRequestBase benchmarkSupplierPreConstructed() {
+    return SUPPLIER_PRE_CONSTRUCTED.get();
   }
 }

@@ -15,6 +15,8 @@ mvn clean package \
 This benchmark tests whether using if-else, switch, or a Supplier class is faster when
 going through **the same branch** in succession.
 
+### Trial 1
+
 The initial implementation (commit f36fa67) found that the Supplier method was fastest, but not by
 a significant amount.  This seems to make sense because no branching instructions are necessary,
 but I thought the branch predictor would do a good job of being right because the first conditional
@@ -36,3 +38,15 @@ NoOpBenchmark.noop                      avgt      20    ≈ 10⁻⁴            
 It also seems plausible that a majority of this time is spent constructing the object, rather than
 going through the branching instructions, so the next set of benchmarks sought to remove the object construction.
 
+### Trial 2
+
+In the supplier implementation, it does seem like a majority of the time is spent in object construction.
+
+```
+BranchingBenchmark.benchmarkSupplier                 thrpt      20    21.407 ±  4.346  ops/us
+BranchingBenchmark.benchmarkSupplierPreConstructed   thrpt      20   375.652 ±  8.742  ops/us
+NoOpBenchmark.noop                                   thrpt      20  3500.235 ± 57.356  ops/us
+BranchingBenchmark.benchmarkSupplier                  avgt      20     0.051 ±  0.008   us/op
+BranchingBenchmark.benchmarkSupplierPreConstructed    avgt      20     0.003 ±  0.001   us/op
+NoOpBenchmark.noop                                    avgt      20    ≈ 10⁻⁴            us/op
+```
