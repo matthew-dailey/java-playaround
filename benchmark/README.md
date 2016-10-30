@@ -58,24 +58,24 @@ BranchingBenchmark.benchmarkSupplierPreConstructed    avgt      20     0.003 ± 
 NoOpBenchmark.noop                                    avgt      20    ≈ 10⁻⁴            us/op
 ```
 
-Then implementing all the benchmarks
+Then implementing all the benchmarks (at revision a28849f)
 
 ```
 Benchmark                                            Mode  Cnt     Score    Error   Units
-BranchingBenchmark.benchmarkIfElse                  thrpt   20    29.377 ±  0.181  ops/us
-BranchingBenchmark.benchmarkIfElsePreConstructed    thrpt   20   399.611 ±  1.671  ops/us
-BranchingBenchmark.benchmarkSupplier                thrpt   20    29.784 ±  0.190  ops/us
-BranchingBenchmark.benchmarkSupplierPreConstructed  thrpt   20   400.330 ±  3.209  ops/us
-BranchingBenchmark.benchmarkSwitch                  thrpt   20    25.923 ±  0.132  ops/us
-BranchingBenchmark.benchmarkSwitchPreConstructed    thrpt   20   189.024 ±  3.573  ops/us
-NoOpBenchmark.noop                                  thrpt   20  3577.627 ± 60.499  ops/us
-BranchingBenchmark.benchmarkIfElse                   avgt   20     0.034 ±  0.001   us/op
-BranchingBenchmark.benchmarkIfElsePreConstructed     avgt   20     0.003 ±  0.001   us/op
-BranchingBenchmark.benchmarkSupplier                 avgt   20     0.034 ±  0.001   us/op
-BranchingBenchmark.benchmarkSupplierPreConstructed   avgt   20     0.002 ±  0.001   us/op
-BranchingBenchmark.benchmarkSwitch                   avgt   20     0.039 ±  0.001   us/op
-BranchingBenchmark.benchmarkSwitchPreConstructed     avgt   20     0.006 ±  0.001   us/op
-NoOpBenchmark.noop                                   avgt   20    ≈ 10⁻⁴            us/op
+BranchingBenchmark.benchmarkConstructingIfElse      thrpt   20    27.118 ±  0.456  ops/us
+BranchingBenchmark.benchmarkConstructingSupplier    thrpt   20    27.909 ±  0.242  ops/us
+BranchingBenchmark.benchmarkConstructingSwitch      thrpt   20    24.417 ±  0.515  ops/us
+BranchingBenchmark.benchmarkPreConstructedIfElse    thrpt   20   353.047 ±  7.319  ops/us
+BranchingBenchmark.benchmarkPreConstructedSupplier  thrpt   20   347.220 ±  4.950  ops/us
+BranchingBenchmark.benchmarkPreConstructedSwitch    thrpt   20   164.716 ±  3.349  ops/us
+NoOpBenchmark.noop                                  thrpt   20  3107.719 ± 55.770  ops/us
+BranchingBenchmark.benchmarkConstructingIfElse       avgt   20     0.037 ±  0.001   us/op
+BranchingBenchmark.benchmarkConstructingSupplier     avgt   20     0.037 ±  0.001   us/op
+BranchingBenchmark.benchmarkConstructingSwitch       avgt   20     0.043 ±  0.001   us/op
+BranchingBenchmark.benchmarkPreConstructedIfElse     avgt   20     0.003 ±  0.001   us/op
+BranchingBenchmark.benchmarkPreConstructedSupplier   avgt   20     0.003 ±  0.001   us/op
+BranchingBenchmark.benchmarkPreConstructedSwitch     avgt   20     0.006 ±  0.001   us/op
+NoOpBenchmark.noop                                   avgt   20    ≈ 10⁻³            us/op
 ```
 
 This shows
