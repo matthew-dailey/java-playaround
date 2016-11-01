@@ -76,6 +76,22 @@ public class BranchingBenchmark {
   }
 
   @Benchmark
+  public HttpRequestBase benchmarkConstructingSwitchFewOptions() {
+    HttpRequestBase request;
+    switch (HTTP_VERB) {
+    case HttpGet.METHOD_NAME:
+      request = new HttpGet();
+      break;
+    case HttpHead.METHOD_NAME:
+      request = new HttpHead();
+      break;
+    default:
+      throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
+    }
+    return request;
+  }
+
+  @Benchmark
   public HttpRequestBase benchmarkPreConstructedSwitch() {
     HttpRequestBase request;
     switch (HTTP_VERB) {
@@ -102,6 +118,22 @@ public class BranchingBenchmark {
       break;
     case HttpPatch.METHOD_NAME:
       request = PATCH;
+      break;
+    default:
+      throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
+    }
+    return request;
+  }
+
+  @Benchmark
+  public HttpRequestBase benchmarkPreConstructedSwitchFewOptions() {
+    HttpRequestBase request;
+    switch (HTTP_VERB) {
+    case HttpGet.METHOD_NAME:
+      request = GET;
+      break;
+    case HttpHead.METHOD_NAME:
+      request = HEAD;
       break;
     default:
       throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
