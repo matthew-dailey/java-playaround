@@ -7,7 +7,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>matt-nocommit</artifactId>
-    <name>playaround without commit</name>
     <description>Code that should not be committed</description>
 
     <dependencies>

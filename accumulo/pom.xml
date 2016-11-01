@@ -7,7 +7,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>matt-accumulo</artifactId>
-    <name>accumulo playaround</name>
 
     <dependencies>
         <dependency>
