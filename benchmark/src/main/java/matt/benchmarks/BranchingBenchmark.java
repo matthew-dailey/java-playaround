@@ -167,6 +167,19 @@ public class BranchingBenchmark {
   }
 
   @Benchmark
+  public HttpRequestBase benchmarkConstructingIfElseFewOptions() {
+    HttpRequestBase request;
+    if (HTTP_VERB.equals(HttpGet.METHOD_NAME)) {
+      request = new HttpGet();
+    } else if (HTTP_VERB.equals(HttpHead.METHOD_NAME)) {
+      request = new HttpHead();
+    } else {
+      throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
+    }
+    return request;
+  }
+
+  @Benchmark
   public HttpRequestBase benchmarkPreConstructedIfElse() {
     HttpRequestBase request;
     if (HTTP_VERB.equals(HttpGet.METHOD_NAME)) {
@@ -185,6 +198,19 @@ public class BranchingBenchmark {
       request = OPTIONS;
     } else if (HTTP_VERB.equals(HttpPatch.METHOD_NAME)) {
       request = PATCH;
+    } else {
+      throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
+    }
+    return request;
+  }
+
+  @Benchmark
+  public HttpRequestBase benchmarkPreConstructedIfElseFewOptions() {
+    HttpRequestBase request;
+    if (HTTP_VERB.equals(HttpGet.METHOD_NAME)) {
+      request = GET;
+    } else if (HTTP_VERB.equals(HttpHead.METHOD_NAME)) {
+      request = HEAD;
     } else {
       throw new RuntimeException(String.format("%s is not a known HTTP verb", HTTP_VERB));
     }
