@@ -106,3 +106,35 @@ only loads one implementation of `Supplier<HttpRequestBase>`, which means that f
 through that interface go directly to the object rather than make a virtual function call.
 I tried to combat this by having two implementations in the benchmark class, but if each benchmark method only
 uses one of those, then it's entirely possible that the forked JVMs only load one implementation each.
+
+### Trial 3
+
+Do the number of options in the switch statement matter?  Benchmarks run against revision 95ad664.
+
+```
+Benchmark                                                    Mode  Cnt     Score     Error   Units
+BranchingBenchmark.benchmarkConstructingIfElse              thrpt   20    28.160 ±   0.138  ops/us
+BranchingBenchmark.benchmarkConstructingIfElseFewOptions    thrpt   20    26.204 ±   3.367  ops/us
+BranchingBenchmark.benchmarkConstructingSupplier            thrpt   20    25.067 ±   2.787  ops/us
+BranchingBenchmark.benchmarkConstructingSwitch              thrpt   20    25.079 ±   0.213  ops/us
+BranchingBenchmark.benchmarkConstructingSwitchFewOptions    thrpt   20    26.703 ±   0.117  ops/us
+BranchingBenchmark.benchmarkPreConstructedIfElse            thrpt   20   400.026 ±   2.236  ops/us
+BranchingBenchmark.benchmarkPreConstructedIfElseFewOptions  thrpt   20   400.145 ±   1.744  ops/us
+BranchingBenchmark.benchmarkPreConstructedSupplier          thrpt   20   378.510 ±  18.801  ops/us
+BranchingBenchmark.benchmarkPreConstructedSwitch            thrpt   20   170.256 ±   3.133  ops/us
+BranchingBenchmark.benchmarkPreConstructedSwitchFewOptions  thrpt   20   375.343 ±  23.539  ops/us
+NoOpBenchmark.noop                                          thrpt   20  3593.874 ± 115.008  ops/us
+BranchingBenchmark.benchmarkConstructingIfElse               avgt   20     0.037 ±   0.004   us/op
+BranchingBenchmark.benchmarkConstructingIfElseFewOptions     avgt   20     0.036 ±   0.001   us/op
+BranchingBenchmark.benchmarkConstructingSupplier             avgt   20     0.035 ±   0.001   us/op
+BranchingBenchmark.benchmarkConstructingSwitch               avgt   20     0.041 ±   0.002   us/op
+BranchingBenchmark.benchmarkConstructingSwitchFewOptions     avgt   20     0.038 ±   0.001   us/op
+BranchingBenchmark.benchmarkPreConstructedIfElse             avgt   20     0.003 ±   0.001   us/op
+BranchingBenchmark.benchmarkPreConstructedIfElseFewOptions   avgt   20     0.003 ±   0.001   us/op
+BranchingBenchmark.benchmarkPreConstructedSupplier           avgt   20     0.003 ±   0.001   us/op
+BranchingBenchmark.benchmarkPreConstructedSwitch             avgt   20     0.006 ±   0.001   us/op
+BranchingBenchmark.benchmarkPreConstructedSwitchFewOptions   avgt   20     0.003 ±   0.001   us/op
+NoOpBenchmark.noop                                           avgt   20    ≈ 10⁻³             us/op
+```
+
+Interestingly, the number of options in a switch statement matters, but not in the `if-else` chain.
