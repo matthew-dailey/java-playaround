@@ -12,7 +12,9 @@ mvn clean package -DskipTests -am -pl benchmark \
 ## BranchingBenchmark
 
 This benchmark tests whether using if-else, switch, or a Supplier class is faster when
-going through **the same branch** in succession.
+comparing with Strings, and going through **the same** comparison branch multiple times
+in succession.  In other words, the expression under the `if` of an `if-elseif-else` ladder
+is always true.
 
 Run with JMH 1.12 on:
 
@@ -21,6 +23,20 @@ java version "1.7.0_80"
 Java(TM) SE Runtime Environment (build 1.7.0_80-b15)
 Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)
 ```
+
+### Hypothesis
+
+Without knowing how `switch` is implemented with Strings, I assume that the `if-else` and `switch` forms should have
+similar performance.  Even though the Supplier method requires no branching, I suspect the overhead of a virtual
+function call (since I would be calling on an interface rather than concrete implementation) will cause this to
+perform more poorly than the other two options.
+
+### Conclusions
+
+### Reading material
+
+* [Why switch is faster than if](http://stackoverflow.com/questions/6705955/why-switch-is-faster-than-if)
+* [Switch for String faster than if](http://stackoverflow.com/questions/22110707/how-is-string-in-switch-statement-more-efficient-than-corresponding-if-else-stat)
 
 ### Trial 1
 
