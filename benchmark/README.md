@@ -170,7 +170,7 @@ and make a decision about the conditional ordering.
 ### Additional Reading
 
 * Virtual function calls [not so virtual](http://stackoverflow.com/a/973531/698839).
-I updated the link to [Oracle's documentation[(https://wiki.openjdk.java.net/display/HotSpot/PerformanceTechniques)
+I updated the link to [Oracle's documentation](https://wiki.openjdk.java.net/display/HotSpot/PerformanceTechniques)
 in this answer in the comments
 * [Why switch is faster than if](http://stackoverflow.com/questions/6705955/why-switch-is-faster-than-if):
 because the compiler can usually make a lookup table
