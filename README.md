@@ -8,3 +8,4 @@ For example, testing out:
 * Lambda functions in Java 8
 * Concurrency in Java 8, along with Guava Futures
 * A solution to filter out records from a set if already present in Accumulo
+
